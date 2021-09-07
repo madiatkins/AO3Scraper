@@ -1,3 +1,8 @@
+Mads edition!
+
+
+
+
 # AO3Scraper
 
 In collaboration with [@ssterman](https://github.com/ssterman). A simple Python [Archive of Our Own](https://archiveofourown.org/) scraper. Now with HASTAC 2017 [presentation slides](https://docs.google.com/presentation/d/1GrpMYw25Bz_m0r2hv0Orgp-uxSIi4HdrHpzL6deCopc)!
