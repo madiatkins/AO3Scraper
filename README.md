@@ -1,5 +1,20 @@
-Mads edition!
+# Mads edition!
+This repository is made with the help of the wonder AO3Scraper repository. I am making a Twitter bot that will post Archive of Our Own fanfiction tags for certain fandoms on respective Twitter accounts. The twitter_bot.py file will include the code required to make the bot work.
 
+The process goes as follows:
+1. Use the AO3Scraper code to pull data from Archive of Our Own. From this data, I will separate out the tags it gathers and manually go through to clean up duplicates and non-relevant tags. (We want our tags to be funny and custom!)
+2. Place the data in a database using SQLite3 for easy reference and pulling of information as needed.
+3. Create a dictionary where the key is the tag and the value is a custom string "template" of the fanfiction information (ship/paring and link to the fic itself) which I will gather from the database. This will be used later to create a reply to the original tweet.
+4. Using the Twitter API's POST status call, I will grab from the database to tweet tags to a specific account. I will gather the response in a JSON file.
+5. Update the database to include the tweet ID of the tag just posted.
+6. Grab from the database the tweet ID in order to use the Twitter API's POST status call again, but use in_reply_to_status_id to reply to the tweet that will include the fanfiction information (ship/pairing and link to the fic itself).
+7. The response from in_reply_to_status_id will be placed in a JSON for archival purposes. I do not have plans to use that data right now, but good to have.
+
+Please note that it has been years since I last coded in Python, and I have never pushed information to Twitter using their API - I have only ever pulled information from Twitter. Because of htis, my code will not be super clean or perfect in any way, but I hope that it will get the job done.
+
+Anyone and everything is allowed to use this code to develop their own AO3 Twitter tag bots or fork and expand upon it for your own ideas. I'd love to hear about your ideas and customization of the code if you do so! Feel free to email me at madqueeen.ao3@gmail.com!
+
+Below you will find the original README text from the AO3Scraper repository - HUGE shoutout to them for developing an awesome tool like this!! :D
 
 
 
