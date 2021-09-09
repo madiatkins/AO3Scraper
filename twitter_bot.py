@@ -19,16 +19,13 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 
 ### I need to convert the hannibal_fic_info.csv to JSON, and then open it
-CACHE_FNAME = "hannibal_fic_info"
+CACHE_FNAME = "hannibal_fic_info2.json"
 
 # Put the rest of your caching setup here:
-try:
-	cache_file = open(CACHE_FNAME,'r', encoding="cp1252")
-	cache_contents = cache_file.read()
-	cache_file.close()
-	CACHE_DICTION = json.loads(cache_contents)
-except:
-	CACHE_DICTION = {}
+cache_file = open(CACHE_FNAME,'r', encoding="cp1252")
+cache_contents = cache_file.read()
+cache_file.close()
+CACHE_DICTION = json.loads(cache_contents)
 
 ### Write info I want to database (I need to replay the info when I convert to JSON)
 
