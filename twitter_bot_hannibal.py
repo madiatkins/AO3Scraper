@@ -2,7 +2,7 @@
 import itertools
 import collections
 import tweepy
-import twitter_info 
+import twitter_info_hannibal 
 import json
 import sqlite3
 import re
@@ -22,27 +22,28 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 CACHE_FNAME = "hannibal_fic_info2.json"
 
 # Put the rest of your caching setup here:
-cache_file = open(CACHE_FNAME,'r', encoding="cp1252")
-cache_contents = cache_file.read()
-cache_file.close()
-CACHE_DICTION = json.loads(cache_contents)
+try:
+	cache_file = open(CACHE_FNAME,'r', encoding="cp1252")
+	cache_contents = cache_file.read()
+	cache_file.close()
+	CACHE_DICTION = json.loads(cache_contents)
+except:
+	print("cache not open")
 
-### Write info I want to database (I need to replay the info when I convert to JSON)
 
+### Write initial info I want to database
 conn = sqlite3.connect("hannibal_fics.db")
 cur = conn.cursor()
 
-
 cur.execute("DROP TABLE IF EXISTS HannibalFics")
-cur.execute("CREATE TABLE IF NOT EXISTS HannibalFics (tweet_ID INTEGER PRIMARY KEY, created_at TEXT, url TEXT, tweet_text TEXT, num_favorites INTEGER, num_retweets INTEGER, hashtags TEXT, media TEXT)")
+cur.execute("CREATE TABLE IF NOT EXISTS HannibalFics (work_id INTEGER PRIMARY KEY, title TEXT, relationship TEXT, additional_tags TEXT, link TEXT)")
 
-for thing in CACHE_DICTION:
-	cur.execute("INSERT INTO HannibalFics (tweet_ID, created_at, url, tweet_text, num_favorites, num_retweets, hashtags, media) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (x['id'], x['created_at'], x['source'], x['text'], x['favorite_count'], x['retweet_count'], str(x['entities']['hashtags']), str(x['entities'])))
+for fic in CACHE_DICTION:
+	cur.execute("INSERT INTO HannibalFics (work_id, title, relationship, additional_tags, link) VALUES (?, ?, ?, ?, ?)", (fic['work_id'], fic['title'], fic['relationship'], fic['additional tags'], 'https://archiveofourown.org/works/' + str(fic['work_id'])))
 
 conn.commit()
-
-
 conn.close()
+print("done with database!")
 
 
 
