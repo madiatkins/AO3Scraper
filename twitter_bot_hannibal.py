@@ -8,10 +8,10 @@ import sqlite3
 import re
 
 ### Connect to tweepy and my Twitter account
-consumer_key = twitter_info.consumer_key
-consumer_secret = twitter_info.consumer_secret
-access_token = twitter_info.access_token
-access_token_secret = twitter_info.access_token_secret
+consumer_key = twitter_info_hannibal.consumer_key
+consumer_secret = twitter_info_hannibal.consumer_secret
+access_token = twitter_info_hannibal.access_token
+access_token_secret = twitter_info_hannibal.access_token_secret
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
