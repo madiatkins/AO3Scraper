@@ -15,6 +15,8 @@ import csv
 import sys
 import datetime
 import argparse
+from tqdm import tqdm
+import pdb
 
 page_empty = False
 base_url = ""
@@ -75,7 +77,7 @@ def get_args():
     csv_name = str(args.out_csv)
     
     # defaults to all
-    if (str(args.num_to_retrieve) is 'a'):
+    if (str(args.num_to_retrieve) == 'a'):
         num_requested_fic = -1
     else:
         num_requested_fic = int(args.num_to_retrieve)
@@ -100,11 +102,31 @@ def get_args():
 # 
 # navigate to a works listed page,
 # then extract all work ids
-# 
+# note for mads: where i made changes
 def get_ids(header_info=''):
     global page_empty
     headers = {'user-agent' : header_info}
-    req = requests.get(url, headers=headers)
+    
+    try:
+        req = requests.get(url, headers=headers)
+    except requests.exceptions.ConnectionError:
+        print("CONNECTION ERROR", url)
+        time.sleep(15)
+        try:
+            req = requests.get(url, headers=headers)
+        except requests.exceptions.ConnectionError:
+            print(url, "FAILED TWICE -- SKIPPING")
+            return []
+    
+    wait_time = 15
+    increment = 1
+    while req.text == 'Retry later\n':
+        tqdm.write("Page reads 'retry later'")
+        time.sleep(wait_time * increment)
+        req = requests.get(url, headers=headers)
+        increment += 1
+        if increment > 6:
+            break
     soup = BeautifulSoup(req.text, "lxml")
 
     # some responsiveness in the "UI"
@@ -112,8 +134,9 @@ def get_ids(header_info=''):
     sys.stdout.flush()
     works = soup.select("li.work.blurb.group")
     # see if we've gone too far and run out of fic: 
-    if (len(works) is 0):
+    if (len(works) == 0):
         page_empty = True
+        print(f'\nEnded on url {url}')
 
     # process list for new fic ids
     ids = []
@@ -146,12 +169,12 @@ def update_url_to_next_page():
     start = url.find(key)
 
     # there is already a page indicator in the url
-    if (start is not -1):
+    if (start != -1):
         # find where in the url the page indicator starts and ends
         page_start_index = start + len(key)
         page_end_index = url.find("&", page_start_index)
         # if it's in the middle of the url
-        if (page_end_index is not -1):
+        if (page_end_index != -1):
             page = int(url[page_start_index:page_end_index]) + 1
             url = url[:page_start_index] + str(page) + url[page_end_index:]
         # if it's at the end of the url
@@ -162,7 +185,7 @@ def update_url_to_next_page():
     # there is no page indicator, so we are on page 1
     else:
         # there are other modifiers
-        if (url.find("?") is not -1):
+        if (url.find("?") != -1):
             url = url + "&page=2"
         # there an no modifiers yet
         else:
