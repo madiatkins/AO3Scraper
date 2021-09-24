@@ -46,31 +46,6 @@ def read_file_extract_list(fname):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-practice = [
-	{"example tag haha": {
-		"ship":"thorki", 
-		"link":"https://archiveofourown.org"
-	}},
-
-	{"yet another example": {
-		"ship":"stucky",
-		"link":"https:archiveofourown.org/works"
-	}}	
-]	
-
 # Following prints the pairing and link text I want in the reply, which takes from a list of dictionaries within dictionaries
 for dict in practice:
     for dict2 in dict.values():

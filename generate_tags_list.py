@@ -1,3 +1,4 @@
+### RUN THIS PROGRAM FIRST
 import json
 import re
 import sqlite3
